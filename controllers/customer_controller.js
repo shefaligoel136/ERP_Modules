@@ -1,4 +1,5 @@
 const CustomerPD = require('../models/customers_personal_details');
+const url = require('url');
 
 // create customer : post
 module.exports.createCustomer = async function(req,res){
@@ -62,5 +63,22 @@ module.exports.deleteIndvCustomer = async function(req,res){
         res.send(deleteCustomer);
     }catch(err){
         res.status(500).send(err);
+    }
+}
+
+// get customer of particular score
+
+module.exports.scoreCustomer = async function(req,res){
+    try{
+        const queryObject = url.parse(req.url,true).query;
+        const score = queryObject.score;
+        const name = queryObject.name;
+        const scoreCustomer = await CustomerPD.find({
+            score : score,
+            first_name : name
+        });
+        res.send(scoreCustomer);
+    }catch(err){
+        res.send(err);
     }
 }
